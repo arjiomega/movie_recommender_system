@@ -81,7 +81,7 @@ def predict_(request: Request, movie:str):
     response = {
         "message": HTTPStatus.OK.phrase,
         "status-code": HTTPStatus.OK,
-        "data": "Testoutput",
+        "data": "Test2",
     }
     return response
 
