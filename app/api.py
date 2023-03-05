@@ -76,11 +76,12 @@ def predict_(request: Request, movie:str):
     rs.add_movie(movie)
     output_ = rs.recommend()
 
-    data = {"predict": output_.to_dict(orient='records')}
+    #data = {"predict": output_.to_dict(orient='records')}
+    data = {"predict": output_.to_dict()}
     response = {
         "message": HTTPStatus.OK.phrase,
         "status-code": HTTPStatus.OK,
-        "data": data,
+        "data": "Testoutput",
     }
     return response
 
