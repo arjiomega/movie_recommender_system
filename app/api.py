@@ -40,7 +40,7 @@ def construct_response(f):
         }
         if "data" in results:
             response["data"] = results["data"]
-        return response
+        return JSONResponse(response)
 
     return wrap
 
