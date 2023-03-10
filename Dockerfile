@@ -3,6 +3,10 @@ FROM public.ecr.aws/lambda/python:3.9
 # Install the function's dependencies using file requirements.txt
 # from your project folder.
 
+ARG API_KEY_INPUT
+
+ENV API_KEY $API_KEY_INPUT
+
 COPY app ./app
 
 COPY movies_data.pkl .
