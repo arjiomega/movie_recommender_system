@@ -25,7 +25,7 @@ https://developers.themoviedb.org/3/getting-started/introduction
 ```python
 tmdb_api_key = '<api_key>'
 ```
-
+**Additional Note**: Import category.py in main.py and adjust accordingly if you were to run this locally because this code uses github secrets to add env variable to docker image
 
 ## Run fastAPI using uvicorn
 ```bash
