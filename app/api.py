@@ -67,17 +67,22 @@ def _index(request: Request) -> Dict:
     return response
 
 from pathlib import Path
+from pydantic import BaseModel
+from fastapi import Query
 
+class Item(BaseModel):
+    user_id: int
+    movie_list: list[int]
 
-@app.get("/predict", tags=["predict"])
+@app.post("/predict", tags=["predict"])
 @construct_response
-def predict_(request: Request, movie:str):
-    rs = RecommendationSystem()
-    rs.add_movie(movie)
+def predict_(request: Request, user_input:Item):
+
+    rs = RecommendationSystem(user_input.movie_list)
     output_ = rs.recommend()
 
-    #data = {"predict": output_.to_dict(orient='records')}
-    data = {"predict": output_.to_dict(orient='records')}
+    data = {"user_input": user_input.movie_list,
+            "predict": output_.to_dict(orient='records')}
     response = {
         "message": HTTPStatus.OK.phrase,
         "status-code": HTTPStatus.OK,
