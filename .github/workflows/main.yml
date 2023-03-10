@@ -5,8 +5,6 @@ on:
   push:
     branches: [ main ]
 
-env:
-    API_KEY: ${{ secrets.API_KEY }}
 
 jobs:
   
@@ -14,18 +12,28 @@ jobs:
     
     name: Build Image
     runs-on: ubuntu-latest
+    env:
+      API_KEY: ${{ secrets.API_KEY }}
 
     steps:
     
-    - name: Test
+    - name: Setup Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '^3.9'
+        
+    - name: Create python script
       run: |
-        if ["$API_KEY" == "3ff7e7fd6d5dfaa54dc83a776a962a50"]
-        then
-          echo "Working"
-        fi
-      env: |
-       API_KEY: ${{ secrets.API_KEY }}
-    
+        cat > showenv.py <<'EOF'
+        import os
+
+        print(f'API key is {os.environ['API_KEY']}')
+        EOF
+
+    - name: Run python script
+      run: |
+        python showenv.py
+
     - name: Check out code
       uses: actions/checkout@v2
 
