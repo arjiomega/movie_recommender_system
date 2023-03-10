@@ -11,6 +11,7 @@ jobs:
     
     name: Build Image
     runs-on: ubuntu-latest
+    environment: ENV_SECRET 
     env:
      API_KEY: ${{ secrets.API_KEY }}
    
@@ -18,7 +19,24 @@ jobs:
     
     - name: Check out code
       uses: actions/checkout@v2
-    
+      
+    - name: Setup Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '^3.9'
+      
+    - name: Create python script
+      run: |
+          cat > showenv.py <<'EOF'
+          import os
+
+          print(f'api_key is {os.environ.get("API_KEY", "<unknown")}')
+          EOF
+          
+    - name: Test env variable
+      run: | 
+          python showenv.py
+      
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
