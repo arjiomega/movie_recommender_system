@@ -26,8 +26,7 @@ jobs:
         aws-region: us-east-2
         
     - name: Set API_KEY environment variable
-      env:
-       API_KEY: ${{ secrets.API_KEY }}
+      run: echo "API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV
 
     - name: Login to Amazon ECR
       id: login-ecr
