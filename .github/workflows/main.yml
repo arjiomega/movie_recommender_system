@@ -27,7 +27,7 @@ jobs:
         cat > showenv.py <<'EOF'
         import os
 
-        print(f'API key is {os.environ['API_KEY']}')
+        print(f'API key is {os.environ["API_KEY"]}')
         EOF
 
     - name: Run python script
