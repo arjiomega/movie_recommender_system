@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 import pandas as pd
 from pathlib import Path
 
@@ -22,7 +21,12 @@ DATA_DIR = Path(BASE_DIR,"data")
 #from config import tmdb_api_key
 
 import os
-tmdb_api_key = os.environ.get('API_KEY')
+tmdb_api_key = os.environ.get('TMDB_API_KEY')
+print("here: ", tmdb_api_key)
+
+
+if not tmdb_api_key:
+    raise ValueError("no tmdb_api_key")
 
 base_url = 'https://api.themoviedb.org/3/'
 
@@ -87,6 +91,7 @@ class RecommendationSystem:
             keywords_url = f'{base_url}/movie/{movie_id}/keywords?api_key={tmdb_api_key}'
             response = requests.get(keywords_url)
             json_ = json.loads(response.text)
+            print(json_)
             keywords_list = [kw['name'] for kw in json_['keywords']]
 
             casts_crews_url = f'{base_url}/movie/{movie_id}/credits?api_key={tmdb_api_key}&language=en-US'
