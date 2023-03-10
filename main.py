@@ -21,7 +21,7 @@ DATA_DIR = Path(BASE_DIR,"data")
 #from config import tmdb_api_key
 
 import os
-tmdb_api_key = os.environ['TMDB_API_KEY']
+tmdb_api_key = os.environ['API_KEY']
 
 if not tmdb_api_key:
     raise ValueError("no tmdb_api_key")
