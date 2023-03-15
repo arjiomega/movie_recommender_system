@@ -7,3 +7,6 @@ uvicorn == 0.20.0
 requests == 2.28.2
 # for aws lambda
 mangum == 0.17.0
+
+# for ml
+scikit-surprise == 1.1.3
