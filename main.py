@@ -1,19 +1,4 @@
-import numpy as np
-import pandas as pd
 from pathlib import Path
-
-# to convert string to the right data type (csv to pd dataframe)
-from ast import literal_eval
-
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-
-import pickle
-import requests
-import json
-
-from ast import literal_eval
-from nltk.stem.snowball import SnowballStemmer
 
 BASE_DIR = Path(__file__).parent.absolute()
 DATA_DIR = Path(BASE_DIR,"data")
@@ -22,10 +7,8 @@ MODELS_DIR = Path(BASE_DIR,"models")
 import os
 tmdb_api_key = os.environ.get('API_KEY')
 
-if not tmdb_api_key:
-    from config import tmdb_api_key
-#import rs_models
-from rs_models import contentFilter,hybridFilter,collabFilter
+from config import *
+from rs_models import preprocess,contentFilter,collabFilter#, hybridFilter
 
 
 base_url = 'https://api.themoviedb.org/3/'
@@ -33,35 +16,48 @@ base_url = 'https://api.themoviedb.org/3/'
 
 model_classes = {
     'contentFilter': contentFilter,
-    'hybridFilter': hybridFilter,
+    'hybridFilter': None, #hybridFilter,
     'collabFilter': collabFilter
 }
 
 class RecommendationSystem:
-    def __init__(self,MODEL_NAME='contentBasedFiltering'):
+    def __init__(self,user_id):
         #self.load_movies_df = pd.read_pickle('movies_data.pkl')
         #self.movie_list = movie_list
-        self.MODEL_NAME = MODEL_NAME
-
-    def get_model_name(self):
-        return self.MODEL_NAME
-
-    def load_input(self,movie_list):
+        self.user_id = user_id
         ...
+
+    def load_input(self,movie_list:list[int]):
+        if hasattr(self,'model_name'):
+            self.user_df = preprocess.add_soup(movie_list)
+            self.movie_list = movie_list
+        else:
+            print('choose a model first using load_model method')
 
     def load_model(self,model_name:str):
         if model_name in model_classes:
-            model = model_classes[model_name]
-        ...
+            self.instance = model_classes[model_name]
+            self.model_name = model_name
+            return self.instance
+        else:
+            print(f"model {model_name} is not available. Choose one below.")
+            print('\n'.join( list( model_classes.keys() ) ))
 
     def predict(self):
-        ...
+        if hasattr(self,'instance'):
+            # for contentFilter
+            predict_model = self.instance.run(user_id=self.user_id,movie_list=self.movie_list,user_df=self.user_df)
+
+            ###############################
+            #for collabFilter
+            # import random
+            # user_rating = [{'id':tmdb_id,'rating':rating} for tmdb_id,rating in zip(self.movie_list,[random.randint(0, 5) for _ in range(len(self.movie_list))])]
+            #predict_model = self.instance.run(user_id=self.user_id,user_rating=user_rating,user_df=self.user_df)
+            ###############################
+
+            recommend = predict_model.predict()
+            return recommend
+        else:
+            print('choose a model first using load_model method')
 
 
-# test = RecommendationSystem()
-movie_list = [76600, 267805, 785084, 823999, 842544, 842942, 843794, 1058949]
-test = RecommendationSystem()
-test.load_model(model_name='contentFilter')
-#output_ = test.recommend()
-# #print(output_.to_dict())
-#print(output_)

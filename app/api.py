@@ -6,7 +6,6 @@ from typing import Dict
 from functools import wraps
 from datetime import datetime
 
-import pickle
 from pathlib import Path
 import sys
 sys.path.append(Path(__file__).parent.parent.absolute())
@@ -78,11 +77,14 @@ class Item(BaseModel):
 @construct_response
 def predict_(request: Request, user_input:Item):
 
-    rs = RecommendationSystem(user_input.movie_list)
-    output_ = rs.recommend()
+    test = RecommendationSystem(user_id=user_input.user_id)
+    test.load_model(model_name='contentFilter')
+    test.load_input(user_input.movie_list)
+    recommend = test.predict()
 
     data = {"user_input": user_input.movie_list,
-            "predict": output_.to_dict(orient='records')}
+            #"predict": output_.to_dict(orient='records')}
+            "predict": recommend}
     response = {
         "message": HTTPStatus.OK.phrase,
         "status-code": HTTPStatus.OK,

@@ -42,7 +42,7 @@ def elt():
     movies_df['id'] = movies_df['id'].astype('int')
     movies_df = movies_df.merge(credits, on='id')
     movies_df = movies_df.merge(keywords, on='id')
-    load_movies_df = movies_df[movies_df['id'].isin(links_df)]
+    load_movies_df = movies_df[movies_df['id'].isin(links_df)].copy()
     load_movies_df['cast'] = load_movies_df['cast'].apply(literal_eval)
     load_movies_df['crew'] = load_movies_df['crew'].apply(literal_eval)
     load_movies_df['keywords'] = load_movies_df['keywords'].apply(literal_eval)
@@ -60,7 +60,7 @@ def elt():
     load_movies_df['director'] = load_movies_df['director'].astype('str').apply(lambda x: str.lower(x.replace(" ", "")))
     load_movies_df['director'] = load_movies_df['director'].apply(lambda x: [x,x, x])
 
-    s = load_movies_df.apply(lambda x: pd.Series(x['keywords']),axis=1).stack().reset_index(level=1, drop=True)
+    s = load_movies_df.apply(lambda x: pd.Series(x['keywords'],dtype='object'),axis=1).stack().reset_index(level=1, drop=True)
     s.name = 'keyword'
 
     s = s.value_counts()
@@ -77,6 +77,9 @@ def elt():
     load_movies_df['soup'] = load_movies_df['soup'].apply(lambda x: ' '.join(x))
 
     load_movies_df = load_movies_df.reset_index()
+
+    # remove duplicate pairs ('title' and 'id')
+    load_movies_df = load_movies_df.drop_duplicates(subset=['title','id'],keep="first")
 
 
     load_movies_df.to_pickle(Path(DATA_DIR,'movies_data.pkl'))
