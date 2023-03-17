@@ -9,4 +9,5 @@ requests == 2.28.2
 mangum == 0.17.0
 
 # for ml
+wheel
 scikit-surprise == 1.1.3
