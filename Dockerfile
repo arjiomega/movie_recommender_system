@@ -13,7 +13,7 @@ COPY movies_data.pkl .
 
 COPY main.py .
 COPY data.py .
-
+COPY config.py .
 
 COPY requirements.txt  .
 RUN yum install gcc -y
