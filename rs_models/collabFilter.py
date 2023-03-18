@@ -7,7 +7,7 @@ import sys
 sys.path.append(Path(__file__).parent.parent.absolute())
 from config import *
 
-reader = Reader()
+reader = Reader(rating_scale=(0.0, 5.0))
 
 class run:
     def __init__(self,user_id:int,user_rating:list[dict[int,int]],user_df):
