@@ -14,6 +14,7 @@ COPY movies_data.pkl .
 COPY main.py .
 COPY data.py .
 COPY config.py .
+COPY rs_models ./rs_models
 
 COPY requirements.txt  .
 RUN yum install gcc -y
