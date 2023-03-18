@@ -1,7 +1,6 @@
-FROM public.ecr.aws/lambda/python:3.9
+# BUILD STAGE
 
-# Install the function's dependencies using file requirements.txt
-# from your project folder.
+FROM public.ecr.aws/lambda/python:3.9 AS build
 
 ARG API_KEY_INPUT
 
@@ -21,6 +20,15 @@ COPY data ./data
 COPY requirements.txt  .
 RUN yum install gcc -y
 RUN  pip3 install -r requirements.txt --target "${LAMBDA_TASK_ROOT}"
+
+# FINAL STAGE
+FROM public.ecr.aws/lambda/python:3.9
+
+ENV API_KEY $API_KEY_INPUT
+ENV SURPRISE_DATA_FOLDER ./data
+
+# Copy only the necessary files from the build stage
+COPY --from=build "${LAMBDA_TASK_ROOT}" "${LAMBDA_TASK_ROOT}"
 
 # Copy function code
 COPY app/api.py ${LAMBDA_TASK_ROOT}
