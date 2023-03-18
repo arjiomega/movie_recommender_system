@@ -15,6 +15,7 @@ COPY main.py .
 COPY data.py .
 COPY config.py .
 COPY rs_models ./rs_models
+COPY data ./data
 
 COPY requirements.txt  .
 RUN yum install gcc -y

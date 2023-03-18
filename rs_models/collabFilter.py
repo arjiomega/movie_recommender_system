@@ -1,20 +1,5 @@
-import numpy as np
 import pandas as pd
 from pathlib import Path
-
-# to convert string to the right data type (csv to pd dataframe)
-from ast import literal_eval
-
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-
-import pickle
-import requests
-import json
-
-from ast import literal_eval
-from nltk.stem.snowball import SnowballStemmer
-
 from surprise import Reader, Dataset, SVD
 from surprise.model_selection import cross_validate
 
@@ -30,7 +15,7 @@ class run:
         self.user_df = user_df
         self.user_df = self.user_df.merge(pd.DataFrame(user_rating),on='id')
         self.ratings = pd.read_csv(Path(DATA_DIR,'ratings_small.csv'),usecols=['userId','movieId','rating'])
-        id_map = pd.read_csv(Path(DATA_DIR,'links.csv'))[['movieId', 'tmdbId']]
+        id_map = pd.read_csv(Path(DATA_DIR,'links_small.csv'))[['movieId', 'tmdbId']]
 
         # remove null
         id_map = id_map.dropna()

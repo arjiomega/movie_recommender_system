@@ -7,6 +7,8 @@ import sys
 sys.path.append(Path(__file__).parent.parent.absolute())
 
 from config import *
+import os
+tmdb_api_key = os.environ.get('API_KEY')
 
 def weighted_rating(x: pd.DataFrame,C:float,m:float) -> float:
         """Calculates the weighted rating for a movie
