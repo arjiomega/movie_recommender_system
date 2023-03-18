@@ -16,7 +16,7 @@ COPY data.py .
 
 
 COPY requirements.txt  .
-RUN pip3 install wheel
+RUN yum install gcc -y
 RUN  pip3 install -r requirements.txt --target "${LAMBDA_TASK_ROOT}"
 
 # Copy function code
