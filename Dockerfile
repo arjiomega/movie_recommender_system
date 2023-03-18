@@ -24,6 +24,8 @@ RUN  pip3 install -r requirements.txt --target "${LAMBDA_TASK_ROOT}"
 # FINAL STAGE
 FROM public.ecr.aws/lambda/python:3.9
 
+ARG API_KEY_INPUT
+
 ENV API_KEY $API_KEY_INPUT
 ENV SURPRISE_DATA_FOLDER ./data
 
